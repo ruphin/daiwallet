@@ -20,7 +20,6 @@ const createColor = () => {
   const h = Math.floor(rand() * 360);
   const s = `${rand() * 60 + 40}%`;
   const l = `${(rand() + rand() + rand() + rand()) * 25}%`;
-  console.log(`hsl(${h},${s},${l})`);
   return `hsl(${h},${s},${l})`;
 };
 
