@@ -5,6 +5,11 @@ window.modulesAssetPath = module => {
   return `/pages/${module}`;
 };
 
+// accounts.add('0x5B9880B7DAAC20Ae719B2c7D8D0228a435F2DA5f');
+// accounts.add('0x5B9880B7DAAC20Ae719B2ca6c34d164135398226');
+// accounts.add('0x2a65Aca4D5fC5B5C859090a6c34d164135398226');
+// accounts.own('0x2a65Aca4D5fC5B5C859090a6c34d164135398226', 'supersecretprivkey');
+
 class AppElement extends GluonElement {
   get template() {
     return html`
@@ -24,6 +29,7 @@ class AppElement extends GluonElement {
         <accounts-page route="accounts"></accounts-page>
         <account-page route="accounts/"></account-page>
         <login-page route="login">LOGIN</login-page>
+        <add-account-page route="add">ADD</add-account-page>
       </div>
     `;
   }
@@ -72,6 +78,7 @@ class AppElement extends GluonElement {
 
       // Show the new page
       if (this._routes[newPath]) {
+        this._routes[newPath].visit && this._routes[newPath].visit();
         this._routes[newPath].classList.add('visible');
       } else {
         console.log(this._routes, newPath);
@@ -87,15 +94,19 @@ class AppElement extends GluonElement {
       if (this._routes[newPath]) {
         const pageName = this._routes[newPath].tagName.toLowerCase().slice(0, -5);
         const newPage = `${(window.modulesAssetPath && window.modulesAssetPath(pageName)) || ''}/${pageName}.js`;
-        console.log(`Attempting to lazy-load ${newPage}`);
         import(newPage).then(
           e => {
+            console.log('Loaded ' + newPage);
+
             // TODO: Only do this once
             this.querySelector('#loadingScreen').setAttribute('loaded', '');
-            console.log('Lazy loaded ' + newPage);
+
+            // TODO: Only do this once for each unique path
+            this._routes[newPath].visit && this._routes[newPath].visit();
           },
           e => {
-            console.warn('Cannot lazy load ' + newPage);
+            console.log(e);
+            console.warn('Cannot load ' + newPage);
             window.history.back();
           }
         );
@@ -108,7 +119,6 @@ class AppElement extends GluonElement {
     });
 
     Array.prototype.map.call(this.$.pages.children, page => {
-      console.log(page);
       this._routes[page.getAttribute('route')] = page;
     });
 

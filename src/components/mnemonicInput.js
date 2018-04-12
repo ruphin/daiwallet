@@ -17,25 +17,32 @@ class MnemonicInput extends GluonElement {
         }
         .option {
           padding: 3px 5px;
-          background: lightblue;
+          background: orange;
+          color: white;
+          font-family: "Roboto";
+          font-weight: 500;
+          font-size: 16px;
           border-radius: 5px;
+          border: none;
+          margin: 0 5px 5px 0;
         }
 
-        #mnemonic {
+        input {
+          margin-bottom: 20px;
+        }
+
+        #mnemonic, #options {
           min-height: 40px;
-        }
-
-        #mnemonic span {
-          padding: 3px 5px;
-          background: lightblue;
-          border-radius: 5px;
+          display: flex;
+          flex-wrap: wrap;
+          align-items: flex-start;
         }
       </style>
       <div id="mnemonic">
         ${repeat(
           this.mnemonic,
           option => html`
-            <span>${option}</span>
+            <span class="option">${option}</span>
           `
         )}
       </div>
@@ -70,6 +77,9 @@ class MnemonicInput extends GluonElement {
       }
       if (matches.length === 1) {
         this.mnemonic.push(matches.pop());
+        if (this.mnemonic.length === 12) {
+          this.dispatchEvent(new Event('mnemonic'));
+        }
         this.$.input.value = '';
       }
     }
@@ -79,6 +89,9 @@ class MnemonicInput extends GluonElement {
 
   optionClicked(e) {
     this.mnemonic.push(e.target.innerText);
+    if (this.mnemonic.length === 12) {
+      this.dispatchEvent(new Event('mnemonic'));
+    }
     this.$.input.value = '';
     this.options = [];
     this.$.input.focus();

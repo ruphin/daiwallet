@@ -7,11 +7,6 @@ import '../../components/mnemonicInput.js';
 import * as accounts from '../../lib/accounts.js';
 import * as blockies from '../../lib/blockies.js';
 
-accounts.add('0x5B9880B7DAAC20Ae719B2c7D8D0228a435F2DA5f');
-accounts.add('0x5B9880B7DAAC20Ae719B2ca6c34d164135398226');
-accounts.add('0x2a65Aca4D5fC5B5C859090a6c34d164135398226');
-accounts.own('0x2a65Aca4D5fC5B5C859090a6c34d164135398226', 'supersecretprivkey');
-
 class AccountsPage extends GluonElement {
   get template() {
     return html`
@@ -20,9 +15,6 @@ class AccountsPage extends GluonElement {
           display: block;
           overflow: none;
           background: #f3f3f3;
-        }
-        .address {
-          font-family: monospace;
         }
         h1 {
           font-weight: normal;
@@ -50,6 +42,11 @@ class AccountsPage extends GluonElement {
         }
         .refresh, .add {
           width: 60px;
+        }
+        .top .shortcuts .add {
+          background-image: url('/pages/accounts/add.png');
+          background-position: center center;
+          background-repeat: no-repeat;
         }
 
         .accounts {
@@ -88,6 +85,7 @@ class AccountsPage extends GluonElement {
         }
         .account .identifier {
           display: flex;
+          align-items: center;
         }
         .account .identifier ethereum-blockie {
           margin-right: 20px;
@@ -99,9 +97,11 @@ class AccountsPage extends GluonElement {
         }
 
         .account .identifier .address .name {
+          font-weight: 400;
           color: #232323;
         }
         .account .identifier .address .hex {
+          font-family: monospace;
           color: grey;
         }
         .account .value {
@@ -115,55 +115,70 @@ class AccountsPage extends GluonElement {
         </div>
         <div class="shortcuts">
           <div class="refresh"></div>
-          <div class="add"></div>
+          <a href="/add" class="add"></a>
         </div>
       </div>
-      <div class="accounts">
-        <div class="title">
-          <span class="type">Open accounts</span>
-          <span class="currency">DAI</span>
-        </div>
-        ${repeat(
-          accounts.list().filter(account => account.owned),
-          account => account.address,
-          account => html`
-            <a class="account" href=${'/accounts/' + account.address}>
-              <div class="identifier">
-                <ethereum-blockie address=${account.address}></ethereum-blockie>
-                <div class="address">
-                  <span class="name">${account.name || 'Spending Wallet'}</span>
-                  <span class="hex">${account.address.slice(0, 10)}</span>
+      ${
+        accounts.list().some(account => account.owned)
+          ? html`
+        <div class="accounts">
+          <div class="title">
+            <span class="type">Open accounts</span>
+            <span class="currency">DAI</span>
+          </div>
+          ${repeat(
+            accounts.list().filter(account => account.owned),
+            account => account.address,
+            account => html`
+              <a class="account" href=${'/accounts/' + account.address}>
+                <div class="identifier">
+                  <ethereum-blockie address=${account.address}></ethereum-blockie>
+                  <div class="address">
+                    <span class="name">${account.name || 'Spending Wallet'}</span>
+                    <span class="hex">${account.address.slice(0, 10)}</span>
+                  </div>
                 </div>
-              </div>
-              <span class="value">${account.value || '1236.13'}</span>
-            </a>
-        `
-        )}
-      </div>
-      <div class="accounts">
-        <div class="title">
-          <span class="type">Locked accounts</span>
-          <span class="currency">DAI</span>
+                <span class="value">${account.value || '1236.13'}</span>
+              </a>
+          `
+          )}
         </div>
-        ${repeat(
-          accounts.list().filter(account => !account.owned),
-          account => account.address,
-          account => html`
-            <a class="account" href=${'/accounts/' + account.address}>
-              <div class="identifier">
-                <ethereum-blockie address=${account.address}></ethereum-blockie>
-                <div class="address">
-                  <span class="name">${account.name || 'Spending Wallet'}</span>
-                  <span class="hex">${account.address.slice(0, 10)}</span>
+      `
+          : ''
+      }
+
+      ${
+        accounts.list().some(account => !account.owned)
+          ? html`
+        <div class="accounts">
+          <div class="title">
+            <span class="type">Locked accounts</span>
+            <span class="currency">DAI</span>
+          </div>
+          ${repeat(
+            accounts.list().filter(account => !account.owned),
+            account => account.address,
+            account => html`
+              <a class="account" href=${'/accounts/' + account.address}>
+                <div class="identifier">
+                  <ethereum-blockie address=${account.address}></ethereum-blockie>
+                  <div class="address">
+                    <span class="name">${account.name || 'Spending Wallet'}</span>
+                    <span class="hex">${account.address.slice(0, 10)}</span>
+                  </div>
                 </div>
-              </div>
-              <span class="value">${account.value || '1236.13'}</span>
-            </a>
-        `
-        )}
-      </div>
-      <!-- <mnemonic-input></mnemonic-input> -->
+                <span class="value">${account.value || '1236.13'}</span>
+              </a>
+          `
+          )}
+        </div>
+      `
+          : ''
+      }
     `;
+  }
+  visit() {
+    this.render();
   }
   _open(account) {
     window.history.replaceState({}, null, `/account/${account.address}`);

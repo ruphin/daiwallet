@@ -7,6 +7,11 @@ import * as accounts from '../../lib/accounts.js';
 import * as blockies from '../../lib/blockies.js';
 
 class AccountPage extends GluonElement {
+  constructor() {
+    super();
+    this.account = { address: '' };
+  }
+
   get template() {
     return html`
       <style>
@@ -14,9 +19,6 @@ class AccountPage extends GluonElement {
           display: block;
           overflow: none;
           background: #f3f3f3;
-        }
-        .address {
-          font-family: monospace;
         }
         h1 {
           font-weight: normal;
@@ -46,78 +48,89 @@ class AccountPage extends GluonElement {
           width: 60px;
         }
 
-        .accounts {
-          padding: 12px 20px 0px;
-          background: white;
+        .top .shortcuts .add {
+          background-image: url('/pages/accounts/add.png')
         }
-        .accounts:last-child {
-          border-bottom: 1px solid lightgrey;
-        }
-        .accounts:last-child .account:last-child {
-          border-bottom: none;
-        }
-        .accounts .title {
+
+        .accountHeader {
+          background: orange;
+          color: white;
+          padding: 12px;
           display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          margin-bottom: 16px;
-        }
-        .accounts .title .type {
-          font-size: 15px;
-          color: orange;
-          font-weight: bold;
-        }
-        .accounts .title .currency {
-          color: grey;
-        }
-        .account {
-          display: flex;
-          text-decoration: none;
           justify-content: space-between;
           align-items: center;
-          margin-top: 12px;
-          padding-bottom: 12px;
-          border-bottom: 1px solid lightgrey;
-          
         }
-        .account .identifier {
+        .accountHeader .identifier {
           display: flex;
+          align-items: center;
         }
-        .account .identifier ethereum-blockie {
-          margin-right: 20px;
+        .accountHeader .identifier ethereum-blockie {
+          margin-right: 14px;
         }
-        .account .identifier .address {
+        .accountHeader .identifier .address {
           display: flex;
           flex-flow: column;
           justify-content: space-between;
         }
 
-        .account .identifier .address .name {
-          color: #232323;
+        .accountHeader .identifier .address .hex {
+          font-family: monospace;
         }
-        .account .identifier .address .hex {
-          color: grey;
+
+        .accountHeader .identifier .address .name {
+          font-weight: 500;
         }
-        .account .value {
-          color: #121212;
+
+        .controls {
+          background: orange;
+          display: flex;
+          justify-content: center;
+          flex-wrap: nowrap;
+          padding: 6px;
+        }
+
+        .controls button {
+          color: orange;
+          font-weight: 500;
+          background: white;
+          border: none;
+          padding: 8px 0;
+          border-radius: 5px;
+          margin: 6px;
+          width: 200px;
+          font-family: "Roboto";
         }
       </style>
       <div class="top">
         <div class="menuTitle">
           <div class="menuToggle"></div>
-          <h1>Accounts</h1>
+          <h1>${this.account.owned ? 'Payment' : 'Observed'} account</h1>
         </div>
         <div class="shortcuts">
           <div class="refresh"></div>
-          <div class="add"></div>
         </div>
+      </div>
+      <div class="accountHeader">
+        <div class="identifier">
+          <ethereum-blockie address=${this.account.address}></ethereum-blockie>
+          <div class="address">
+            <span class="name">${this.account.name || 'Spending Wallet'}</span>
+            <span class="hex">${this.account.address.slice(0, 10)}</span>
+          </div>
+        </div>
+        <span class="value">${this.account.value || '1236.13'} DAI</span>
+      </div>
+      <div class="controls">
+        ${this.account.owned ? html`<button>Transfer</button>` : html`<button>Unlock</button>`}
+        <button>Receive</button>
       </div>
       <!-- <mnemonic-input></mnemonic-input> -->
     `;
   }
-  _open(account) {
-    window.history.replaceState({}, null, `/account/${account.address}`);
-    window.dispatchEvent(new Event('location-changed'));
+
+  visit() {
+    this.account = accounts.get(currentPath().slice(10));
+    this.render();
   }
 }
 

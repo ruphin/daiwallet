@@ -35,6 +35,12 @@ export const own = (address, privkey) => {
 
 // Return array of registered accounts
 export const list = () => {
-  const accounts = JSON.parse(storage.read('accounts'));
+  const accounts = JSON.parse(storage.read('accounts')) || {};
   return Object.keys(accounts).map(address => Object.assign({ address: address }, accounts[address]));
+};
+
+// Return a single account
+export const get = address => {
+  const accounts = JSON.parse(storage.read('accounts')) || {};
+  return Object.assign({ address: address }, accounts[address]);
 };
