@@ -9,13 +9,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "gluonjs": "^2.2.0",
-    "gluon-router": "^0.0.3"
+    "gluonjs": "2.3.0",
+    "gluon-router": "^1.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
+    "babel-plugin-external-helpers": "^6.22.0",
     "browser-sync": "^2.23.6",
     "connect-history-api-fallback": "^1.5.0",
     "rollup": "^0.56.4",

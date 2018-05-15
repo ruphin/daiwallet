@@ -1,9 +1,14 @@
 import { GluonElement, html } from '../node_modules/gluonjs/gluon.js';
-import { onRouteChange, currentPath, resolveURL } from '../node_modules/gluon-router/gluon-router.js';
+import { interceptLinks, onRouteChange, currentPath, resolveURL } from '../node_modules/gluon-router/gluon-router.js';
+import './pages/account/account.js';
+import './pages/accounts/accounts.js';
+import './pages/add-account/add-account.js';
 
 window.modulesAssetPath = module => {
   return `/pages/${module}`;
 };
+
+interceptLinks();
 
 // accounts.add('0x5B9880B7DAAC20Ae719B2c7D8D0228a435F2DA5f');
 // accounts.add('0x5B9880B7DAAC20Ae719B2ca6c34d164135398226');
@@ -90,27 +95,28 @@ class AppElement extends GluonElement {
         return;
       }
 
-      // Lazy load any new pages we are visiting that haven't been loaded yet
-      if (this._routes[newPath]) {
-        const pageName = this._routes[newPath].tagName.toLowerCase().slice(0, -5);
-        const newPage = `${(window.modulesAssetPath && window.modulesAssetPath(pageName)) || ''}/${pageName}.js`;
-        import(newPage).then(
-          e => {
-            console.log('Loaded ' + newPage);
+      // // Lazy load any new pages we are visiting that haven't been loaded yet
+      // if (this._routes[newPath]) {
+      //   const pageName = this._routes[newPath].tagName.toLowerCase().slice(0, -5);
+      //   const newPage = `${(window.modulesAssetPath && window.modulesAssetPath(pageName)) || ''}/${pageName}.js`;
+      //   import(newPage).then(
+      //     e => {
+      //       console.log('Loaded ' + newPage);
 
-            // TODO: Only do this once
-            this.querySelector('#loadingScreen').setAttribute('loaded', '');
+      //       // TODO: Only do this once
+      //       this.querySelector('#loadingScreen').setAttribute('loaded', '');
 
-            // TODO: Only do this once for each unique path
-            this._routes[newPath].visit && this._routes[newPath].visit();
-          },
-          e => {
-            console.log(e);
-            console.warn('Cannot load ' + newPage);
-            window.history.back();
-          }
-        );
-      }
+      //       // TODO: Only do this once for each unique path
+      //       this._routes[newPath].visit && this._routes[newPath].visit();
+      //     },
+      //     e => {
+      //       console.log(e);
+      //       console.warn('Cannot load ' + newPage);
+      //       window.history.back();
+      //     }
+      //   );
+      // }
+
       // // Log out user
       // if (newPath === 'logout') {
       //   this.loginStatus = false;
@@ -137,3 +143,8 @@ class AppElement extends GluonElement {
 }
 
 customElements.define(AppElement.is, AppElement);
+
+// Only with dynamic imports disabled
+window.setTimeout(() => {
+  document.querySelector('#loadingScreen').setAttribute('loaded', '');
+}, 1);

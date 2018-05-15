@@ -1,5 +1,5 @@
 import { GluonElement, html } from '../../../node_modules/gluonjs/gluon.js';
-import { currentPath } from '../../node_modules/gluon-router/gluon-router.js';
+import { currentPath } from '../../../node_modules/gluon-router/gluon-router.js';
 
 import '../../components/blockie.js';
 

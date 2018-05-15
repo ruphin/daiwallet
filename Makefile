@@ -15,5 +15,5 @@ build:
 	docker run -it --rm -v $$PWD:/app ruphin/webdev npm run build
 
 .PHONY: production
-production:
+production: build
 	docker build -t ruphin/daiwallet .

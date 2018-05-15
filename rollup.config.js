@@ -9,12 +9,7 @@ import * as path from 'path';
 function getConfig({ name, input, dest, format, uglified = false, transpiled = false }) {
   return {
     input: input,
-    output: {
-      exports: 'named',
-      file: dest,
-      format,
-      name: name
-    },
+    output: { exports: 'named', file: dest, format, name: name },
     plugins: [
       transpiled && resolve(),
       transpiled &&
@@ -24,9 +19,7 @@ function getConfig({ name, input, dest, format, uglified = false, transpiled = f
       transpiled &&
         babel({
           presets: [['env', { modules: false }]],
-          plugins: ['transform-runtime'],
-          runtimeHelpers: true,
-          exclude: 'node_modules/**'
+          plugins: ['external-helpers']
         }),
       uglified &&
         uglify(
@@ -35,8 +28,8 @@ function getConfig({ name, input, dest, format, uglified = false, transpiled = f
             toplevel: !transpiled,
             sourceMap: true,
             compress: { passes: 2 },
-            mangle: { properties: false },
-            keep_classnames: true
+            mangle: { properties: false, keep_fnames: true },
+            keep_fnames: true
           },
           uglifier
         ),
@@ -45,6 +38,9 @@ function getConfig({ name, input, dest, format, uglified = false, transpiled = f
   };
 }
 
-const config = [getConfig({ name: 'DaiWallet', input: 'src/index.js', dest: './index.js', format: 'es', transpiled: false, uglified: false })];
+const config = [
+  getConfig({ name: 'DaiWallet', input: 'src/index.js', dest: './index.js', format: 'es', transpiled: false, uglified: false }),
+  getConfig({ name: 'DaiWallet', input: 'src/index.js', dest: './index.nomodule.js', format: 'iife', transpiled: true, uglified: true })
+];
 
 export default config;
