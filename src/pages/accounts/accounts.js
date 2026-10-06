@@ -1,5 +1,5 @@
-import { GluonElement, html } from '../../../node_modules/gluonjs/gluon.js';
-import { repeat } from '../../../node_modules/lit-html/lib/repeat.js';
+import { GluonElement, html } from 'gluonjs/gluon.js';
+import { repeat } from 'lit-html/lib/repeat.js';
 
 import '../../components/blockie.js';
 import '../../components/mnemonicInput.js';

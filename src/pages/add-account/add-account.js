@@ -1,4 +1,4 @@
-import { GluonElement, html } from '../../../node_modules/gluonjs/gluon.js';
+import { GluonElement, html } from 'gluonjs/gluon.js';
 import '../../components/mnemonicInput.js';
 
 import * as accounts from '../../lib/accounts.js';

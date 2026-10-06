@@ -1,30 +1,22 @@
 {
   "name": "daiwallet",
   "private": true,
+  "type": "module",
   "description": "A wallet application for the DAI cryptocurrency",
   "scripts": {
-    "build": "rollup -c",
-    "dev": "browser-sync start --config browsersync.config.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run --passWithNoTests"
   },
   "license": "MIT",
   "dependencies": {
+    "gluon-router": "^1.0.1",
     "gluonjs": "2.3.0",
-    "gluon-router": "^1.0.1"
+    "lit-html": "0.10.0"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-plugin-external-helpers": "^6.22.0",
-    "browser-sync": "^2.23.6",
-    "connect-history-api-fallback": "^1.5.0",
-    "rollup": "^0.56.4",
-    "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-commonjs": "^8.4.0",
-    "rollup-plugin-filesize": "^1.5.0",
-    "rollup-plugin-node-resolve": "^3.0.3",
-    "rollup-plugin-paths": "0.0.3",
-    "rollup-plugin-uglify": "^3.0.0"
+    "vite": "^8.3.3",
+    "vitest": "^5.0.3"
   }
 }

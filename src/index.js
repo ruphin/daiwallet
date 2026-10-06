@@ -1,5 +1,5 @@
-import { GluonElement, html } from '../node_modules/gluonjs/gluon.js';
-import { interceptLinks, onRouteChange, currentPath, resolveURL } from '../node_modules/gluon-router/gluon-router.js';
+import { GluonElement, html } from 'gluonjs/gluon.js';
+import { interceptLinks, onRouteChange, currentPath, resolveURL } from 'gluon-router/gluon-router.js';
 import './pages/account/account.js';
 import './pages/accounts/accounts.js';
 import './pages/add-account/add-account.js';
